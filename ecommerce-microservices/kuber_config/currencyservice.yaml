@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currencyservice ### name of the microservice
+spec:
+  selector:
+    matchLabels:
+      app: currencyservice
+  template:
+    metadata:
+      labels:
+        app: currencyservice # pod name
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: service # conatiner name
+        image: gcr.io/google-samples/microservices-demo/currencyservice:v0.5.2
+        ports:
+        - containerPort: 7000
+        env:
+        - name: PORT
+          value: "7000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: currencyservice # name Service of microservice 
+spec:
+  type: ClusterIP
+  selector:
+    app: currencyservice # name of the microservice
+  ports:
+  - protocol: TCP
+    port: 7000
+    targetPort: 7000

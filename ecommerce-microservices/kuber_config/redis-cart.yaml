@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cart ### name of the microservice
+spec:
+  selector:
+    matchLabels:
+      app: redis-cart
+  template:
+    metadata:
+      labels:
+        app: redis-cart # pod name
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: service # conatiner name
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        emptyDir: {}
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cart # name Service of microservice 
+spec:
+  type: ClusterIP
+  selector:
+    app: redis-cart # name of the microservice
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379

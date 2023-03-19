@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xxx ### name of the microservice
+spec:
+  selector:
+    matchLabels:
+      app: xxx
+  template:
+    metadata:
+      labels:
+        app: xxx # pod name
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: xxx  # conatiner name
+        image: xxx  # container image
+        ports:
+        - containerPort: xxx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xxx # name Service of microservice 
+spec:
+  type: ClusterIP
+  selector:
+    app: xxx # name of the microservice
+  ports:
+  - protocol: TCP
+    port: xxx
+    targetPort: xxx
